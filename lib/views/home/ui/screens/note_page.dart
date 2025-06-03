@@ -179,8 +179,9 @@ class _NotePageState extends State<NotePage> {
               ),
             ),
           ),
-          const CustomDraggableScrollableSheet(),
-        ],
+          CustomDraggableScrollableSheet(
+            transcriptionText: widget.content,
+          ),        ],
       ),
     );
   }

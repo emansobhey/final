@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradprj/core/helpers/spacing.dart';
 import 'package:gradprj/core/routing/routes.dart';
 import 'package:gradprj/core/theming/my_colors.dart';
+import 'package:gradprj/views/home/ui/screens/note_page.dart';
 import 'package:gradprj/views/home/ui/widgets/app_bar_home.dart';
 import 'package:gradprj/views/home/ui/widgets/bottom_bar_home.dart';
 import 'package:gradprj/views/home/ui/widgets/note_container.dart';
@@ -25,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             NoteContainer(
               height: 150,
               onTap: () {
-                Navigator.pushNamed(context, Routes.notePage);
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>NotePage(content: "AI-Driven tool for Smarter Workflows") ),);
               },
               text: "AI-Driven tool for Smarter Workflows",
             ),
