@@ -1,0 +1,2 @@
+C:/Users/emans/Downloads/gradProject-main/gradProject-main/android/app/.cxx/Debug/7pm69f2j/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/emans/Downloads/gradProject-main/gradProject-main/android/app/.cxx/Debug/7pm69f2j/x86_64/CMakeFiles/rebuild_cache.dir
