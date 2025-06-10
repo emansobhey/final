@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:gradprj/core/models/transicription.dart';
 import 'package:http_parser/http_parser.dart';
-
 class AudioService {
   final Dio _dio = Dio(
     BaseOptions(
