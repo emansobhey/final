@@ -8,7 +8,7 @@ import 'package:gradprj/core/helpers/spacing.dart';
 import 'package:gradprj/core/theming/my_colors.dart';
 import 'package:gradprj/cubit/transcription_cubit.dart';
 import 'package:gradprj/views/home/ui/screens/recording_screen.dart';
-import 'package:gradprj/views/home/ui/screens/note_page.dart'; // ✨ تأكدي إن المسار صح
+import 'package:gradprj/views/home/ui/screens/note_page.dart';
 import 'package:http_parser/http_parser.dart';
 
 class BottomBarHome extends StatefulWidget {
@@ -21,14 +21,14 @@ class BottomBarHome extends StatefulWidget {
 class _BottomBarHomeState extends State<BottomBarHome> {
   bool _isUploading = false;
   String _transcription = "";
+
   Future<void> _pickAndUploadAudio() async {
-    // اختر ملف صوتي
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['wav', 'mp3', 'ogg', 'webm', 'opus'],
     );
 
-    if (result == null) return; // المستخدم ألغى الاختيار
+    if (result == null) return;
 
     String? filePath = result.files.single.path;
     if (filePath == null) return;
@@ -40,7 +40,6 @@ class _BottomBarHomeState extends State<BottomBarHome> {
     });
 
     try {
-      // جهز ملف الرفع مع نوع الميديا حسب الامتداد
       String extension = audioFile.path.split('.').last.toLowerCase();
       String subtype;
       switch (extension) {
@@ -71,32 +70,27 @@ class _BottomBarHomeState extends State<BottomBarHome> {
         ),
       });
 
-      // ارسل الملف للسيرفر
-      String url = "http://192.168.1.102:8000/transcribe/"; // عدّل حسب عنوان سيرفرك
+      String url = "http://192.168.1.102:8000/transcribe/";
       Response response = await Dio().post(
         url,
         data: formData,
         options: Options(
           headers: {"Content-Type": "multipart/form-data"},
+          sendTimeout: const Duration(seconds: 20),
+          receiveTimeout: const Duration(seconds: 30),
         ),
       );
 
-      print("Response Data: ${response.data}");
-
-      // استخرج النص المفرغ من الرد (تأكد من المفتاح في رد سيرفرك)
       String transcription = response.data["transcription"] ?? "لا يوجد نص";
-
-      print("✅ Transcription: $transcription");
 
       setState(() {
         _transcription = transcription;
       });
 
-      // انتقل لصفحة NotePage مع النص
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NotePage(content: transcription,),
+          builder: (context) => NotePage(content: transcription),
         ),
       );
     } catch (e) {
@@ -121,37 +115,35 @@ class _BottomBarHomeState extends State<BottomBarHome> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: context.read<TranscriptionCubit>(),
-                      child: const RecordingScreen(),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.mic,
-                color: MyColors.button1Color,
-                size: 45,
-              ),
-            ),
-            horizontalSpace(20),
-            Stack(
-              alignment: Alignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: context.read<TranscriptionCubit>(),
+                          child: const RecordingScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.mic,
+                    color: MyColors.button1Color,
+                    size: 45,
+                  ),
+                ),
+                horizontalSpace(20),
                 IconButton(
                   onPressed: _isUploading ? null : _pickAndUploadAudio,
                   icon: const Icon(
@@ -160,19 +152,23 @@ class _BottomBarHomeState extends State<BottomBarHome> {
                     size: 45,
                   ),
                 ),
-                if (_isUploading)
-                  const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      color: MyColors.button1Color,
-                      strokeWidth: 2,
-                    ),
-                  ),
               ],
             ),
           ],
         ),
+
+        // 👇 مؤشر التحميل بدون خلفية
+        if (_isUploading)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 60.0),
+              child: const CircularProgressIndicator(
+                color: MyColors.button1Color,
+                strokeWidth: 4,
+              ),
+            ),
+          ),
       ],
     );
   }

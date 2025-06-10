@@ -19,14 +19,14 @@ class _FullTranscriptPageState extends State<FullTranscriptPage> {
   String? enhancedText; // لحفظ النص المحسن
   bool isLoading = false; // حالة تحميل التلخيص
   bool isEnhancing = false; // حالة تحميل التحسين
-
+  final String ipconfig ="192.168.1.102";
   // دالة تلخيص النص
   Future<void> summarizeText() async {
     setState(() => isLoading = true);
 
     try {
       Response response = await Dio().post(
-        "http://http://192.168.1.102:8000/summarize-text/",
+        "http://$ipconfig:8000/summarize-text/",
         data: {"text": widget.fullText},
         options: Options(headers: {"Content-Type": "application/json"}),
       );
@@ -47,7 +47,7 @@ class _FullTranscriptPageState extends State<FullTranscriptPage> {
 
     try {
       Response response = await Dio().get(
-        "hhttp://192.168.1.102:8000/enhance/",
+        "http://$ipconfig/enhance/",
         options: Options(headers: {"Content-Type": "application/json"}),
       );
 

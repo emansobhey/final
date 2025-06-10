@@ -29,7 +29,7 @@ class AppBarHome extends StatelessWidget {
           "Spokify",
           style: MyFontStyle.font28Regular.copyWith(color: MyColors.whiteColor),
         ),
-        horizontalSpace(100),
+        horizontalSpace(80),
         IconButton(
           onPressed: () {},
           icon: const Icon(

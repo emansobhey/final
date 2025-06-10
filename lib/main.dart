@@ -14,7 +14,6 @@ void main() {
       providers: [
         BlocProvider<TranscriptionCubit>(
             create: (_) => TranscriptionCubit(AudioService())),
-        // أضف Cubits أخرى إن وجدت
       ],
       child: GraduationProject(
         routing: app_routing.Routing(),
@@ -35,7 +34,7 @@ class GraduationProject extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: Routes.home,
+          initialRoute: Routes.getStarted,
           onGenerateRoute: routing.generateRoute,
         );
       },

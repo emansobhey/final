@@ -23,6 +23,7 @@ class _RecordingScreenState extends State<RecordingScreen>
   late RecorderController recorderController;
   bool isRecording = false;
   String filePath = '';
+  final String ipconfig ="192.168.1.102";
   int recordingSeconds = 0;
   Timer? _timer;
   String? transcription;
@@ -118,7 +119,7 @@ class _RecordingScreenState extends State<RecordingScreen>
       });
 
       Response response = await Dio().post(
-        "http://192.168.1.102:8000/transcribe/",
+        "http://$ipconfig:8000/transcribe/",
         data: formData,
         options: Options(headers: {"Content-Type": "multipart/form-data"}),
       );
@@ -141,7 +142,7 @@ class _RecordingScreenState extends State<RecordingScreen>
     });
 
     try {
-      final response = await Dio().get('http://192.168.1.102:8000/detect_topics/');
+      final response = await Dio().get('http://$ipconfig:8000/detect_topics/');
       if (response.statusCode == 200) {
         final data = response.data;
 
@@ -178,7 +179,7 @@ class _RecordingScreenState extends State<RecordingScreen>
     });
 
     try {
-      final response = await Dio().get('http://192.168.1.102:8000/extract_tasks/');
+      final response = await Dio().get('http://$ipconfig:8000/extract_tasks/');
       if (response.statusCode == 200) {
         final data = response.data;
         // تقسيم المهام إلى قائمة باستخدام new line
@@ -205,8 +206,8 @@ class _RecordingScreenState extends State<RecordingScreen>
     });
 
     final dio = Dio();
-    const url =
-        'http://192.168.1.102:8000/enhance/'; // غيّري IP لو بتجربي على جهاز حقيقي
+    final url =
+        'http://$ipconfig:8000/enhance/'; // غيّري IP لو بتجربي على جهاز حقيقي
 
     try {
       final response = await dio.get(
@@ -243,8 +244,8 @@ class _RecordingScreenState extends State<RecordingScreen>
     });
 
     final dio = Dio();
-    const url =
-        'http://192.168.1.102:8000/summarize/'; // غيّري IP لو بتجربي على موبايل حقيقي
+    final url =
+        'http://$ipconfig:8000/summarize/'; // غيّري IP لو بتجربي على موبايل حقيقي
 
     try {
       final response = await dio.get(
@@ -298,7 +299,9 @@ class _RecordingScreenState extends State<RecordingScreen>
         appBar: AppBar(
           backgroundColor: MyColors.backgroundColor,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: Image.asset("assets/images/arrow.png", width: 35, height: 35),
           ),
         ),
@@ -323,8 +326,15 @@ class _RecordingScreenState extends State<RecordingScreen>
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text(
-                    transcription ?? "null",
+
+                  child: transcription == null || transcription!.isEmpty
+                      ? const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                      :Text(
+                    transcription !,
                     style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
@@ -334,6 +344,7 @@ class _RecordingScreenState extends State<RecordingScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       const Text(' Enhanced Text:',
                           style: TextStyle(
                               fontSize: 18,

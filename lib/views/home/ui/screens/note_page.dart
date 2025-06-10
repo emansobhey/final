@@ -169,10 +169,33 @@ class _NotePageState extends State<NotePage> {
                       color: MyColors.button1Color,
                     ),
                   )
-                      : CustomGestureDetector(
-                    title: widget.content,
-                    onTap: () => _editText('content'),
-                  ),
+                      :SingleChildScrollView(
+                                                 child: GestureDetector(
+                                                   onTap: () => _editText('content'),
+                                                   child: Container(
+                                                     padding: const EdgeInsets.all(16),
+                                                     margin: const EdgeInsets.symmetric(
+                                                         horizontal: 8, vertical: 8),
+                                                     decoration: BoxDecoration(
+                                                       color: MyColors.backgroundColor,
+                                                       border: Border.all(color: Colors.grey.shade300),
+                                                       borderRadius: BorderRadius.circular(12),
+                                                       boxShadow: [
+                                                         BoxShadow(
+                                                           color: Colors.grey.shade300,
+                                                           blurRadius: 6,
+                                                           offset: const Offset(0, 3),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     child: Text(
+                                                       widget.content,
+                                                       style: const TextStyle(
+                                                           fontSize: 16, color: Colors.white),
+                                                     ),
+                                                   ),
+                                                 ),
+                                               )
 
 
                 ],
