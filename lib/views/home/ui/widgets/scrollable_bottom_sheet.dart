@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gradprj/core/helpers/spacing.dart';
+import 'package:gradprj/core/theming/my_colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,7 +11,6 @@ import '../screens/emailService.dart';
 class CustomDraggableScrollableSheet extends StatefulWidget {
   final String transcriptionText;
 
-  /// لنفترض أن `transcriptionText` هو النص الذي تم تفريغه (مثلاً من Gemini أو غيره).
   const CustomDraggableScrollableSheet(
       {Key? key, required this.transcriptionText})
       : super(key: key);
@@ -22,16 +22,13 @@ class CustomDraggableScrollableSheet extends StatefulWidget {
 
 class _CustomDraggableScrollableSheetState
     extends State<CustomDraggableScrollableSheet> {
-  // فتح/إغلاق نموذج الإيميل
   bool _isEmailFormVisible = false;
   final GlobalKey screenshotKey = GlobalKey();
 
-  // متحكّمات (Controllers) حقول النص
   final TextEditingController _fromEmailController = TextEditingController();
   final TextEditingController _toEmailController = TextEditingController();
 
-  bool _isSending = false; // حالة الإرسال قيد المعالجة
-
+  bool _isSending = false;
   @override
   void dispose() {
     _fromEmailController.dispose();
@@ -39,7 +36,6 @@ class _CustomDraggableScrollableSheetState
     super.dispose();
   }
 
-  /// دالة لعرض/إخفاء نموذج الإيميل (Bottom Modal)
   void _toggleEmailForm() {
     setState(() {
       _isEmailFormVisible = !_isEmailFormVisible;
@@ -157,22 +153,20 @@ class _CustomDraggableScrollableSheetState
     );
   }
 
-  /// دالة حقيقية لإرسال البريد عندما يضغط المستخدم زر Send
   Future<void> _sendEmail() async {
     final String fromEmail = _fromEmailController.text.trim();
     final String toEmail = _toEmailController.text.trim();
     final String message = widget.transcriptionText.trim();
 
-    // تحقق بسيط من صحة الإيميلات
     if (fromEmail.isEmpty || !fromEmail.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('من فضلك أدخل بريد مرسل صحيح')),
+        const SnackBar(content: Text('Please enter your valid  email address.')),
       );
       return;
     }
     if (toEmail.isEmpty || !toEmail.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('من فضلك أدخل بريد مستقبل صحيح')),
+        const SnackBar(content: Text('Please enter a valid recipient email address.')),
       );
       return;
     }
@@ -193,15 +187,16 @@ class _CustomDraggableScrollableSheetState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم إرسال الإيميل بنجاح!')),
+        const SnackBar(content: Text('Email sent successfully!'
+        )),
       );
-      // بعد الإرسال، ننظف الحقول ونغلق النموذج
       _fromEmailController.clear();
       _toEmailController.clear();
       _toggleEmailForm();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('فشل في إرسال الإيميل. حاول مرة أخرى.')),
+        const SnackBar(content: Text('Failed to send the email. Please try again.'
+        )),
       );
     }
   }
@@ -210,10 +205,7 @@ class _CustomDraggableScrollableSheetState
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // الخلفية (يمكن إضافة المحتوى الأصلي هنا إذا كان موجود)
-        // ... (محتوى الخلفية إذا رغبتِ)
 
-        // هذا هو الـ DraggableScrollableShee
         DraggableScrollableSheet(
           initialChildSize: 0.15,
           minChildSize: 0.15,
@@ -241,42 +233,36 @@ class _CustomDraggableScrollableSheetState
                     ),
                   ),
 
-                  // صف الأيقونات
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // أيقونة المشاركة (Share)
                       IconButton(
                         icon: const Icon(Icons.share, color: Colors.white),
                         onPressed: _toggleEmailForm,
                       ),
 
-                      // أيقونة الصورة (مثال)
                       IconButton(
                           icon: const Icon(Icons.image, color: Colors.white),
                           onPressed: () {
                             showImageSizeSelector(context);
                           }),
 
-                      // أيقونة النسخ (Copy)
                       IconButton(
                         icon: const Icon(Icons.copy, color: Colors.white),
                         onPressed: () {
-                          // نسخ النص إلى الحافظة (Clipboard)
                           Clipboard.setData(
                             ClipboardData(text: widget.transcriptionText),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('تم نسخ النص!')),
+                            const SnackBar(content: Text("Text copied!"
+                            )),
                           );
                         },
                       ),
 
-                      // أيقونة الحذف (Delete)
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.white),
                         onPressed: () {
-                          // وظيفة الحذف
                         },
                       ),
                     ],
@@ -302,6 +288,7 @@ class _CustomDraggableScrollableSheetState
                           foregroundColor: Colors.white,
                         ),
                       ),
+                      SizedBox(width: 5,),
                       OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(Icons.mic, color: Colors.white),
@@ -323,6 +310,7 @@ class _CustomDraggableScrollableSheetState
                         ),
                         child: const Text("Summarizing"),
                       ),
+                      SizedBox(width: 5,),
                       OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(Icons.search, color: Colors.white),
@@ -340,9 +328,6 @@ class _CustomDraggableScrollableSheetState
           },
         ),
 
-        // ----------------------------------------------
-        // هذا الجزء هو نموذج الإيميل (Email Form) المُتظاهر فوق الـ Bottom Sheet
-        // ----------------------------------------------
         if (_isEmailFormVisible)
           Container(
             color: Colors.black.withOpacity(0.5), // خلفية شفافة
@@ -406,7 +391,6 @@ class _CustomDraggableScrollableSheetState
                       ),
                       const SizedBox(height: 12),
 
-                      // نصّ الترانسكربشن (لعرضه فقط، وليس للتعديل)
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
@@ -421,24 +405,28 @@ class _CustomDraggableScrollableSheetState
                       ),
                       const SizedBox(height: 20),
 
-                      // صف الأزرار: Send و Cancel
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // زر إلغاء و إغلاق النموذج
-                          TextButton(
-                            onPressed: _toggleEmailForm,
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(color: Colors.redAccent),
+                          ElevatedButton(
+                            onPressed:_toggleEmailForm ,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child:  const Text(
+                              'cancel',
+                              style: TextStyle(fontSize: 16,color: Colors.white),
                             ),
                           ),
-
-                          // زر الإرسال
                           ElevatedButton(
                             onPressed: _isSending ? null : _sendEmail,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: Colors.transparent,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 12),
                               shape: RoundedRectangleBorder(
@@ -456,7 +444,7 @@ class _CustomDraggableScrollableSheetState
                             )
                                 : const Text(
                               'Send',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: 16,color: Colors.white),
                             ),
                           ),
                         ],

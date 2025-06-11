@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gradprj/core/theming/my_colors.dart';
 import 'package:gradprj/core/theming/my_fonts.dart';
 
+import '../../../../core/routing/routes.dart';
+
 class DonotHaveAnAccountRow extends StatelessWidget {
   const DonotHaveAnAccountRow({
     super.key,
@@ -18,12 +20,15 @@ class DonotHaveAnAccountRow extends StatelessWidget {
             color: MyColors.fontColor,
           ),
         ),
-        Text(
-          "Sign up",
-          style: MyFontStyle.font13BoldUnderline.copyWith(
-              color: MyColors.txt2Color,
-              decoration: TextDecoration.underline,
-              decorationColor: MyColors.txt2Color),
+        TextButton(
+          onPressed: () { Navigator.pushNamed(context, Routes.singUp);},
+          child: Text(
+            'Sign up',
+            style: MyFontStyle.font13BoldUnderline.copyWith(
+                color: MyColors.txt2Color,
+                decoration: TextDecoration.underline,
+                decorationColor: MyColors.txt2Color),
+          ),
         ),
       ],
     );

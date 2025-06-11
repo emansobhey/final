@@ -29,11 +29,14 @@ class RecordingContainer extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(timerText,
-                style: const TextStyle(
-                    fontSize: 32,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold)),
+            Text(
+              timerText,
+              style: const TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 20),
             AudioWaveforms(
               enableGesture: false,
@@ -49,18 +52,41 @@ class RecordingContainer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  onPressed: close,
+                _styledIconButton(
+                  icon: Icons.close,
+                  onTap: close,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.refresh, color: Colors.white),
-                  onPressed: refresh,
+                _styledIconButton(
+                  icon: Icons.refresh,
+                  onTap: refresh,
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _styledIconButton({required IconData icon, required VoidCallback onTap}) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: MyColors.backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Icon(icon, color: Colors.white),
       ),
     );
   }

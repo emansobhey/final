@@ -11,6 +11,8 @@ import 'package:gradprj/views/home/ui/screens/recording_screen.dart';
 import 'package:gradprj/views/home/ui/screens/note_page.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../screens/TextProcessingScreen.dart';
+
 class BottomBarHome extends StatefulWidget {
   const BottomBarHome({super.key});
 
@@ -90,7 +92,7 @@ class _BottomBarHomeState extends State<BottomBarHome> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NotePage(content: transcription),
+          builder: (context) => TextProcessingScreen( transcription: transcription,),
         ),
       );
     } catch (e) {
@@ -157,7 +159,6 @@ class _BottomBarHomeState extends State<BottomBarHome> {
           ],
         ),
 
-        // 👇 مؤشر التحميل بدون خلفية
         if (_isUploading)
           Align(
             alignment: Alignment.bottomCenter,

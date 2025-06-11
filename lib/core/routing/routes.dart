@@ -11,5 +11,6 @@ class Routes {
   static const String forget_password = '/forgetPassword';
   static const String about = '/About';
   static const String AskQuestionScreen= 'AskQuestionScreen';
+  static const String TextProcessingScreen= 'TextProcessingScreen';
 
 }
