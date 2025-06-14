@@ -71,7 +71,6 @@ class _FullTranscriptPageState extends State<FullTranscriptPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Original Text
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(

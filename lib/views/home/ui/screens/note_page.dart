@@ -10,27 +10,68 @@ import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
-class NotePage extends StatefulWidget {
-    String content ;
+import '../../../../core/helpers/fetchTranscriptionTitle(.dart';
 
-   NotePage({super.key, required this.content, });
+class NotePage extends StatefulWidget {
+
+   NotePage({super.key, });
 
   @override
   _NotePageState createState() => _NotePageState();
 }
 
 class _NotePageState extends State<NotePage> {
-  String title = "Spokify AI_Driven";
+  String title = "Loading...";
+  String? enhanceError;
+  bool isEnhancing = false; bool showEnhancedPage = false;  String? enhancedText;  final String ipconfig = "192.168.1.102";
 
   String formattedDate = DateFormat('MMM d, y').format(DateTime.now());
   bool _isLoadingTranscript = false;
 
   @override
+  Future<void> fetchEnhancedText() async {
+    setState(() {
+      isEnhancing = true;
+      enhanceError = null;
+    });
 
+    try {
+      final response = await Dio().get('http://$ipconfig:8000/enhance/');
+      if (response.statusCode == 200) {
+        setState(() => enhancedText = response.data['enhanced_text']);
+      } else {
+        enhanceError = "Failed to enhance text.";
+      }
+    } catch (e) {
+      enhanceError = "Enhance Error: $e";
+    } finally {
+      setState(() => isEnhancing = false);
+    }
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    _loadTitle();
+    fetchEnhancedText();
+    fetchEnhancedText();
+  }
+
+  Future<void> _loadTitle() async {
+    final fetchedTitle = await fetchTranscriptionTitle();
+    if (fetchedTitle != null) {
+      setState(() {
+        title = fetchedTitle;
+      });
+    } else {
+      setState(() {
+        title = "No Title Found";
+      });
+    }
+  }
   void _editText(String field) {
     TextEditingController controller = TextEditingController(
-      text: field == 'title' ? title :widget.content,
+      text: field == 'title' ? title :enhancedText,
     );
 
     showDialogEdite(field, controller);
@@ -62,7 +103,7 @@ class _NotePageState extends State<NotePage> {
                 if (field == 'title') {
                   title = controller.text;
                 } else {
-                  widget.content= controller.text;
+                  enhancedText= controller.text;
                 }
               });
               Navigator.pop(context);
@@ -79,7 +120,7 @@ class _NotePageState extends State<NotePage> {
 
   void _editBoth() {
     TextEditingController titleController = TextEditingController(text: title);
-    TextEditingController contentController = TextEditingController(text:widget.content);
+    TextEditingController contentController = TextEditingController(text:enhancedText);
 
     showDialog(
       context: context,
@@ -115,7 +156,7 @@ class _NotePageState extends State<NotePage> {
             onPressed: () {
               setState(() {
                 title = titleController.text;
-                widget.content = contentController.text;
+                enhancedText = contentController.text;
               });
               Navigator.pop(context);
             },
@@ -189,21 +230,22 @@ class _NotePageState extends State<NotePage> {
                                                        ],
                                                      ),
                                                      child: Text(
-                                                       widget.content,
+                                                       enhancedText??"no",
                                                        style: const TextStyle(
                                                            fontSize: 16, color: Colors.white),
                                                      ),
                                                    ),
                                                  ),
-                                               )
+                                               ),
 
 
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.111),
                 ],
               ),
             ),
           ),
           CustomDraggableScrollableSheet(
-            transcriptionText: widget.content,
+            transcriptionText: enhancedText??"no",
           ),        ],
       ),
     );

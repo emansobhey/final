@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const AppBarOfSpokify(),
-            verticalSpace(150),
+            verticalSpace(100),
             Text(
               "Welcome",
               style: MyFontStyle.font45Regular
@@ -71,7 +71,7 @@ class Login extends StatelessWidget {
                     decorationColor: MyColors.whiteColor),
               ),
             ),
-            verticalSpace(60),
+            verticalSpace(10),
             const DonotHaveAnAccountRow()
           ],
         ),

@@ -33,27 +33,29 @@ class about extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: Text(
-                          '''
-Spokify is your smart voice companion.
-It helps you record, transcribe, and analyze your voice notes easily. Whether you're brainstorming, attending meetings, or capturing ideas, Spokify organizes your audio and turns it into structured, meaningful text.
+                        child: const Text(
+                          'Spokify is a mobile-first AI-powered application\n'
+                              'designed to transform spoken content into actionable insights.\n'
+                              'It allows users to upload or record audio,\n'
+                              'which is then transcribed, summarized,\n'
+                              'and grammatically enhanced using Gemini 2.0 Flash.\n'
+                              'Extracted tasks and key topics are identified\n'
+                              'through a LangChain-powered RAG system\n'
+                              'and seamlessly integrated with Trello\n'
+                              'for visual task management.\n'
+                              'The system is built using FastAPI and Flutter,\n'
+                              'ensuring a responsive, scalable experience across platforms.\n'
+                              'Designed for professionals, students, and educators,\n'
+                              'Spokify enhances productivity by converting\n'
+                              'unstructured voice notes into organized, structured outcomes.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            height: 1.6,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
 
-🔹 Key Features:
-
-* Real-time voice recording.
-
-* Smart transcription using AI.
-
-* Keyword search & content highlights.
-
-* Ask questions about past recordings.
-
-* Easy sharing and task creation.''',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.white),
-
-
-                    ),
                   ),
                 )
 

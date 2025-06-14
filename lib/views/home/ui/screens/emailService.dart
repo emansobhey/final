@@ -1,19 +1,12 @@
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EmailService {
-  // TODO: استبدلي هذه القيم بالقيم الحقيقية الخاصة بحساب EmailJS لديك
-  static const String _serviceId =
-      'service_liohz68'; // استبدلي بـ Service ID من EmailJS
-  static const String _templateId =
-      'template_p2quqel'; // استبدلي بـ Template ID من EmailJS
-  static const String _userId =
-      '5zOdcrJU-FsYmwapV'; // استبدلي بـ User ID (Public Key) من EmailJS
+  static const String _serviceId = 'service_liohz68';
+  static const String _templateId = 'template_p2quqel';
+  static const String _userId = '5zOdcrJU-FsYmwapV';
 
-  /// ترسل الإيميل عبر EmailJS API
-  /// [fromEmail]: البريد الذي يريد المستخدم الظهور به كمرسل
-  /// [toEmail]: البريد الذي سيستلم الرسالة
-  /// [message]: نصّ الترانسكربشن أو أي نص ترغبين بإرساله
   static Future<bool> sendEmail({
     required String fromEmail,
     required String toEmail,
@@ -21,7 +14,6 @@ class EmailService {
   }) async {
     const String _emailJsUrl = 'https://api.emailjs.com/api/v1.0/email/send';
 
-    // القيم التي ستُمرّر إلى قالب الإيميل في EmailJS
     final Map<String, dynamic> templateParams = {
       'from_email': fromEmail,
       'to_email': toEmail,
@@ -36,21 +28,20 @@ class EmailService {
     };
 
     try {
-      final http.Response response = await http.post(
+      final response = await http.post(
         Uri.parse(_emailJsUrl),
         headers: {
-          'origin':
-          'http://localhost', // غالبًا EmailJS يطلب أن يكون origin هكذا
+          'origin': 'http://localhost',
           'Content-Type': 'application/json',
         },
         body: json.encode(requestBody),
       );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-      // إذا عاد 200 => تم الإرسال بنجاح
       if (response.statusCode == 200) {
         return true;
       } else {
-        print('EmailJS error: ${response.statusCode} – ${response.body}');
         return false;
       }
     } catch (e) {

@@ -30,7 +30,7 @@ class TranscriptionContainer extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: MyColors.button1Color.withOpacity(0.5), // ظل بنفسجي
+                  color: MyColors.button1Color.withOpacity(0.5),
                   blurRadius: 6,
                   offset: const Offset(0, 3),
                 ),

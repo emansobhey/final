@@ -4,6 +4,8 @@ import 'package:gradprj/core/routing/routes.dart';
 import 'package:gradprj/core/theming/my_colors.dart';
 import 'package:gradprj/views/home/ui/widgets/imageCircleAvatar.dart';
 
+import 'TrelloTokenScreen.dart' show TrelloTokenScreen;
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -14,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool showEditFields = false;
   bool isDark = true;
-
+  final TextEditingController boardController = TextEditingController();
   final TextEditingController nameController =
   TextEditingController(text: "Shrouk Ahmed");
   final TextEditingController emailController =
@@ -30,6 +32,8 @@ class _ProfilePageState extends State<ProfilePage> {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    boardController.dispose();
+
     super.dispose();
   }
 
@@ -123,6 +127,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     obscureText: true,
                   ),
                   const SizedBox(height: 10),
+
+
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -130,12 +136,37 @@ class _ProfilePageState extends State<ProfilePage> {
                         displayedEmail = emailController.text;
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Profile updated')),
+                        const SnackBar(content: Text('Profile updated',style: TextStyle(color: Colors.white),),backgroundColor: MyColors.backgroundColor,)
+                        ,
                       );
                     },
                     child: const Text("Save Changes"),
                   ),
                 ],
+                const Divider(),
+
+                ListTile(
+                  leading: const Icon(Icons.vpn_key, color: MyColors.button1Color ),
+                  title: const Text('Trello Token'),
+                  subtitle: const Text('Manage your Trello authentication'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                    onPressed: () async {
+                      final updatedToken = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => TrelloTokenScreen()),
+                      );
+
+                      if (updatedToken != null && updatedToken is String) {
+                        print("✅ Trello Token Updated: $updatedToken");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('تم تحديث Trello Token')),
+                        );
+                      }
+                    },
+                  ),
+                ),
+
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.settings,
@@ -164,6 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.pushNamed(context, Routes.about);
                     },
                   ),
+
                 ),
                 const SizedBox(height: 25),
                 TextButton.icon(

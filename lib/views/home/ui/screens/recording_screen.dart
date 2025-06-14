@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../core/theming/my_colors.dart';
+import '../../../../core/theming/my_fonts.dart';
 import '../widgets/action_buttons_row.dart';
 import '../widgets/enhanced_text_container.dart';
 import '../widgets/recording_controls.dart';
@@ -16,6 +18,7 @@ import '../widgets/topics_list.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/transcription_container.dart';
 import '../widgets/add_trallo.dart';
+import 'TrelloTokenScreen.dart';
 
 class RecordingScreen extends StatefulWidget {
   const RecordingScreen({super.key});
@@ -230,6 +233,25 @@ class _RecordingScreenState extends State<RecordingScreen> with SingleTickerProv
       setState(() => isLoadingTasks = false);
     }
   }
+  Future<void> refreshRecording() async {
+    try {
+      recorderController.reset();
+      await recorderController.stop();
+      stopTimer();                      // ⏹️ إيقاف المؤقت القديم
+
+      final dir = await getApplicationDocumentsDirectory();
+      filePath = '${dir.path}/recording.m4a'; // ⚠️ اختيار نفس الاسم أو اسم جديد لو تحبي
+
+      await recorderController.record(path: filePath); // 🎙️ تسجيل جديد
+      setState(() {
+        recordingSeconds = 0;
+        isRecording = true;
+      });
+      startTimer(); // 🕒 بدء المؤقت من جديد
+    } catch (e) {
+      print("❌ Error refreshing recording: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -270,7 +292,18 @@ class _RecordingScreenState extends State<RecordingScreen> with SingleTickerProv
                     await fetchTopics();
                     setState(() => showTopics = !showTopics);
                   },
-                  onTrelloPressed: () => showTrelloInputDialog(context),
+                    onTrelloPressed: () async {
+                      final token = await getTrelloToken();
+                      if (token == null || token.isEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => TrelloTokenScreen()),
+                        );
+                      } else {
+                        showTrelloInputDialog(context);
+                      }
+                    }
+
                 ),
                 const SizedBox(height: 30),
                 if (showSsummarization)
@@ -300,7 +333,9 @@ class _RecordingScreenState extends State<RecordingScreen> with SingleTickerProv
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const TopBar(),
+            Text("Spokify",
+                style: MyFontStyle.font38Bold.copyWith(color: Colors.white)),
+            const SizedBox(height: 20),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
@@ -321,7 +356,7 @@ class _RecordingScreenState extends State<RecordingScreen> with SingleTickerProv
                   const SizedBox(height: 20),
                   RecordingControls(
                     onClose: () => Navigator.pop(context),
-                     onRefresh:startRecording,
+                    refreshRecording:refreshRecording
                   ),
                 ],
               ),

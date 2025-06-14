@@ -48,7 +48,7 @@ class EnhancedTextContainer extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.white),
             )
                 : Text(
-              enhanceError ?? (enhancedText ?? "No enhanced text available."),
+              enhanceError ?? (enhancedText ?? "Loeding.."),
               style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),

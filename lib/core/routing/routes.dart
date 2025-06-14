@@ -12,5 +12,6 @@ class Routes {
   static const String about = '/About';
   static const String AskQuestionScreen= 'AskQuestionScreen';
   static const String TextProcessingScreen= 'TextProcessingScreen';
+  static const String AskQuestionPage= 'AskQuestionPage';
 
 }

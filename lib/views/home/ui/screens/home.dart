@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             NoteContainer(
               height: 150,
               onTap: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>NotePage(content: "AI-Driven tool for Smarter Workflows") ),);
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>NotePage() ),);
               },
               text: "AI-Driven tool for Smarter Workflows",
             ),

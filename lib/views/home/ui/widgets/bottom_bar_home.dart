@@ -83,7 +83,7 @@ class _BottomBarHomeState extends State<BottomBarHome> {
         ),
       );
 
-      String transcription = response.data["transcription"] ?? "لا يوجد نص";
+      String transcription = response.data["transcription"] ?? "No Text";
 
       setState(() {
         _transcription = transcription;
@@ -100,12 +100,13 @@ class _BottomBarHomeState extends State<BottomBarHome> {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text("خطأ"),
-          content: Text("حدث خطأ أثناء رفع الملف: $e"),
+          title: const Text("Error"),
+          content: Text("can't uplod file$e"),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("حسناً"),
+              child: const Text(""
+                  "ok"),
             )
           ],
         ),

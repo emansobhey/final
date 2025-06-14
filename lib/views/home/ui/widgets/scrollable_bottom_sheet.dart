@@ -207,9 +207,9 @@ class _CustomDraggableScrollableSheetState
       children: [
 
         DraggableScrollableSheet(
-          initialChildSize: 0.15,
-          minChildSize: 0.15,
-          maxChildSize: 0.95,
+          initialChildSize: 0.12,
+          minChildSize: 0.12,
+          maxChildSize: 0.85,
           builder: (context, controller) {
             return Container(
               decoration: const BoxDecoration(
@@ -279,20 +279,19 @@ class _CustomDraggableScrollableSheetState
                   ),
                   verticalSpace(20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OutlinedButton(
                         onPressed: () {},
-                        child: Text("view transcript"),
+                        child: Text("view transcript" ,style: TextStyle(fontSize: 12),),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                         ),
                       ),
-                      SizedBox(width: 5,),
+SizedBox(width: 10,),
                       OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(Icons.mic, color: Colors.white),
-                        label: const Text("append to note"),
+                        label: const Text("append to note",style: TextStyle(fontSize: 12),),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                         ),
@@ -308,13 +307,12 @@ class _CustomDraggableScrollableSheetState
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text("Summarizing"),
+                        child: const Text("Summarizing",style: TextStyle(fontSize: 12),),
                       ),
-                      SizedBox(width: 5,),
                       OutlinedButton.icon(
                         onPressed: () {},
                         icon: const Icon(Icons.search, color: Colors.white),
-                        label: const Text("detected topics"),
+                        label: const Text("detected topics",style:TextStyle(fontSize: 12),),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                         ),

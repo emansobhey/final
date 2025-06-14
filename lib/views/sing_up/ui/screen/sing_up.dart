@@ -24,7 +24,7 @@ class SignUp extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AppBarOfSpokify(),
-              verticalSpace(80),
+              verticalSpace(60),
               Text(
                 "Create an ",
                 style: MyFontStyle.font45Regular

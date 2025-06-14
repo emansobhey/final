@@ -4,6 +4,8 @@ import 'package:gradprj/core/routing/routes.dart';
 import 'package:gradprj/core/theming/my_colors.dart';
 import 'package:gradprj/core/theming/my_fonts.dart';
 
+import '../screens/SearchResultScreen.dart';
+
 class AppBarHome extends StatelessWidget {
   const AppBarHome({
     super.key,
@@ -29,15 +31,19 @@ class AppBarHome extends StatelessWidget {
           "Spokify",
           style: MyFontStyle.font28Regular.copyWith(color: MyColors.whiteColor),
         ),
-        horizontalSpace(80),
+        horizontalSpace(60),
         IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.search_outlined,
-            color: MyColors.button1Color,
-            size: 35,
-          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AskQuestionPage()),
+            );
+          },
+          icon: const Icon(Icons.search, color: MyColors.button1Color,
+            size: 35,),
         ),
+
+
       ],
     );
   }
